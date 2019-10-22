@@ -4,26 +4,28 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-#include <musica.h>
+#include <stdbool.h>
+//#include <musica.h>
 //#include <semaphore.h>
 #include <sys/msg.h>
 
-#define QTD_MUSICAS 10;
-#define TAM_PALAVRA 512;
+#define QTD_MUSICAS 10
+#define TAM_PALAVRA 512
 
 pthread_t trabalhador1, trabalhador2, trabalhador3, trabalhador4;
 pthread_mutex_t trava;
 int contador = 0;
 int id_mensagem;
-boolean rodando = true;
+bool rodando = true;
 struct Musica aSerEnviada;
 
-//typedef struct Musica{
- //   char nome[TAM_PALAVRA];
- //   char  autor[TAM_PALAVRA];
- //   char  genero[TAM_PALAVRA];
- //   char  duracao[TAM_PALAVRA];
-//} Musica;
+typedef struct Musica{
+    long int tipo_mensagem;
+    char nome[512];
+    char autor[512];
+    char genero[512];
+    char duracao[512];
+} Musica;
 
 struct Musica bliblioteca[] = {
     {.nome = "Get Loud For Me", .autor = "Gizzle", .genero = "Rock", .duracao = "3:01", .tipo_mensagem = 1 },
@@ -42,16 +44,18 @@ void *producao(){
     while(rodando){
 
         pthread_mutex_lock(&trava);
-        aSerEnviada = bliblioteca[];
+        aSerEnviada = bliblioteca[contador%QTD_MUSICAS];
+        contador ++;
         //ENVIA MENSAGEM
-        if (msgsnd(id_mensagem, (void *)&aSerEnviada, sizeof(aSerEnviada), 0) == -1) {
-            fprintf(stderr, "Envio de mensagem falhou\n");
-            exit(EXIT_FAILURE);
-        }
+        printf("Musica enviada: %s Tamanho: %ld\n", aSerEnviada.nome, sizeof(aSerEnviada));
+        //if (msgsnd(id_mensagem, (void *)&aSerEnviada, sizeof(aSerEnviada), 0) == -1) {
+        //    fprintf(stderr, "Envio de mensagem falhou\n");
+        //    exit(EXIT_FAILURE);
+        //}
        
         pthread_mutex_unlock(&trava);
 
-        sleep(2);
+        sleep(7);
 
     }
 
@@ -71,5 +75,5 @@ int main(){
     pthread_join(trabalhador4,NULL); 
 
     pthread_mutex_destroy(&trava);
-    exit(EXIT_SUCESS);
+    exit('EXIT_SUCESS');
 }
