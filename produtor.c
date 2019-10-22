@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include <sys/msg.h>
 
-#define QTD_MUSICAS 10
+#define QTD_MUSICAS 12
 #define TAM_PALAVRA 512
 
 pthread_t trabalhador1, trabalhador2, trabalhador3, trabalhador4;
@@ -36,6 +36,8 @@ struct Musica bliblioteca[] = {
     {.nome = "Take You Down", .autor = "Daniel Pemberton", .genero = "Rock", .duracao = "3:25", .tipo_mensagem = 1 },
     {.nome = "Last Breath", .autor = "Future", .genero = "Rap", .duracao = "4:03", .tipo_mensagem = 1 },
     {.nome = "Pensando Em Você", .autor = "Edy Lemond", .genero = "EletroFunk", .duracao = "3:27", .tipo_mensagem = 1 },
+    {.nome = "X Gon' Give It to Ya", .autor = "DMX", .genero = "Rap", .duracao = "3:40", .tipo_mensagem = 1 },
+    {.nome = "Immigrant Song", .autor = "Led Zeppelin", .genero = "Rock", .duracao = "2:27", .tipo_mensagem = 1 },
 };
 
 void *producao(){
