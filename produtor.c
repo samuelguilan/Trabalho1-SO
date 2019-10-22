@@ -46,7 +46,6 @@ void *producao(){
         contador ++;
         //ENVIA MENSAGEM
         printf("Musica enviada: %s \n", aSerEnviada.nome);
-        //printf("Tamanho de palavra: %ld",sizeof(aSerEnviada));
         if (msgsnd(id_mensagem, (void *)&aSerEnviada, 2056, 0) == -1) {
             fprintf(stderr, "Envio de mensagem falhou\n");
             exit(EXIT_FAILURE);
@@ -61,12 +60,14 @@ void *producao(){
 }
 
 int main(){
+    pthread_mutex_init(&trava, NULL);
+    
     pthread_create(&trabalhador1, NULL, producao, NULL) ;
     pthread_create(&trabalhador2, NULL, producao, NULL) ;
     pthread_create(&trabalhador3, NULL, producao, NULL) ;
     pthread_create(&trabalhador4, NULL, producao, NULL) ; 
     
-    pthread_mutex_init(&trava, NULL);
+    
     
     pthread_join(trabalhador1,NULL);  
     pthread_join(trabalhador2,NULL); 

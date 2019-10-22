@@ -35,13 +35,13 @@ void consome(){
     long int msg_to_receive = 0;
 
     while(rodando){
-        printf("Aguardando musicas .... \n");
+        printf("Aguardando musicas .... \n\n");
         if (msgrcv(id_mensagem, (void *)&musica, TAM_MUSICA,
                    msg_to_receive, 0) == -1) {
             fprintf(stderr, "Recebimento falhou com erro: %d\n", errno);
             exit(EXIT_FAILURE);
         }
-        printf("O programa consumiu: \n Musica: %s \n Autor: %s \n Genero: %s \n Duracao: %s \n", musica.nome, musica.autor, musica.genero, musica.duracao);
+        printf("O programa consumiu: \n \n Musica: %s \n Autor: %s \n Genero: %s \n Duracao: %s \n \n", musica.nome, musica.autor, musica.genero, musica.duracao);
         if (strncmp(musica.nome, "end", 3) == 0) {
             printf("Fim do loop\n");
             rodando = false;
