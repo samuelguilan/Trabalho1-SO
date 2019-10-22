@@ -5,8 +5,6 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdbool.h>
-//#include <musica.h>
-//#include <semaphore.h>
 #include <sys/msg.h>
 
 #define QTD_MUSICAS 10
@@ -21,10 +19,10 @@ struct Musica aSerEnviada;
 
 typedef struct Musica{
     long int tipo_mensagem;
-    char nome[512];
-    char autor[512];
-    char genero[512];
-    char duracao[512];
+    char nome[TAM_PALAVRA];
+    char autor[TAM_PALAVRA];
+    char genero[TAM_PALAVRA];
+    char duracao[TAM_PALAVRA];
 } Musica;
 
 struct Musica bliblioteca[] = {
@@ -47,11 +45,12 @@ void *producao(){
         aSerEnviada = bliblioteca[contador%QTD_MUSICAS];
         contador ++;
         //ENVIA MENSAGEM
-        printf("Musica enviada: %s Tamanho: %ld\n", aSerEnviada.nome, sizeof(aSerEnviada));
-        //if (msgsnd(id_mensagem, (void *)&aSerEnviada, sizeof(aSerEnviada), 0) == -1) {
-        //    fprintf(stderr, "Envio de mensagem falhou\n");
-        //    exit(EXIT_FAILURE);
-        //}
+        printf("Musica enviada: %s \n", aSerEnviada.nome);
+        //printf("Tamanho de palavra: %ld",sizeof(aSerEnviada));
+        if (msgsnd(id_mensagem, (void *)&aSerEnviada, 2056, 0) == -1) {
+            fprintf(stderr, "Envio de mensagem falhou\n");
+            exit(EXIT_FAILURE);
+        }
        
         pthread_mutex_unlock(&trava);
 
@@ -75,5 +74,5 @@ int main(){
     pthread_join(trabalhador4,NULL); 
 
     pthread_mutex_destroy(&trava);
-    exit('EXIT_SUCESS');
+    exit(EXIT_SUCCESS);
 }
